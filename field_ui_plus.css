@@ -1,0 +1,51 @@
+/*-------------------------------------------------------
+  Alter the existing field instance table CSS.
+ -------------------------------------------------------*/
+
+table.field-ui-overview td {
+  padding-top: 8px;
+  position: relative;
+  vertical-align: top;
+}
+
+table.field-ui-overview span.tabledrag-changed {
+  float: left;
+  margin-left: 4px;
+}
+
+/*-------------------------------------------------------
+  CSS to structure the new field instance data.
+ -------------------------------------------------------*/
+
+.field-ui-plus-wrapper {
+  float: left;
+  height: 40px;
+}
+
+.field-ui-plus-data {
+  left: 36px;
+  position: absolute;
+  white-space: nowrap;
+  /* z-index necessary to overflow the td in IE 8+ */
+  z-index: 1; 
+}
+
+.field-ui-plus-data > * {
+  padding-right: 10px;
+}
+
+/*-------------------------------------------------------
+  Look and feel CSS for specific data items.
+ -------------------------------------------------------*/
+
+.field-ui-plus-data-required {
+  color: #993333;
+}
+
+.field-ui-plus-data-textarea-rows {
+  color: #338833;
+}
+
+.field-ui-plus-data-referenced-types {
+  color: #333388;
+}

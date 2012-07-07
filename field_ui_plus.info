@@ -1,0 +1,7 @@
+name = Field UI Plus
+description = Adds summary information display for field configuration.
+package = Administration
+
+dependencies[] = field_ui
+
+core = 7.x
