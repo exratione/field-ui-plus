@@ -25,14 +25,17 @@
  *
  * @param array $instance
  *   A field instance array.
+ * @param array $field
+ *   A field definition array.
  *
  * @return array
  *   An arra of render elements for display.
  */
-function hook_field_ui_plus_instance_data($instance) {
+function hook_field_ui_plus_instance_data($instance, $field) {
   $data = array();
   // Is this field instance required?
   if (!empty($instance['required'])) {
+    // Add a renderable array for this configuration information.
     $data['required'] = array(
       '#type' => 'html_tag',
       '#tag' => 'div',

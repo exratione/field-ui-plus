@@ -5,6 +5,13 @@ page provided by the Field UI module. This helps to see the important field
 instance configuration settings at a glance, without having to walk through
 numerous subpages.
 
+--- Cautions ---
+
+This is intended for use with the default Drupal 7 administrative theme, and
+will no doubt look terrible if used in other administrative themes.
+
+--- Rationale ---
+
 The Field UI module provides an administrative user interface to the Field
 module functionality that works well for the basics, but any earnest use of
 fields will quickly run into its limitations. Suppose, for example, that you
@@ -36,7 +43,23 @@ Hence this module.
 
 --- Hooks ---
 
-To add more information to the field instance configuration settings displayed
-by Field UI Plus, a developer can implement the following hook:
+To display more field instance configuration settings through Field UI Plus, a
+developer can implement the following hook:
 
-hook_field_ui_plus_instance_data($instance)
+hook_field_ui_plus_instance_data($instance) {
+  $data = array();
+  // Is this field instance required?
+  if (!empty($instance['required'])) {
+    // Add a renderable array for this configuration information.
+    $data['required'] = array(
+      '#type' => 'html_tag',
+      '#tag' => 'div',
+      '#value' => t('Required'),
+      '#attributes' => array(
+        'class' => array('field-ui-plus-data-required'),
+      ),
+      '#weight' => 0,
+    );
+  }
+  return $data;
+}

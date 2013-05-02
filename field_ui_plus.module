@@ -11,9 +11,10 @@ function field_ui_plus_form_field_ui_field_overview_form_alter(&$form, &$form_st
   $fields = field_info_fields();
   foreach ($instances as $field_name => $instance) {
     // Obtain the data to be added.
-    $data = module_invoke_all('field_ui_plus_instance_data', $instance);
+    $name = $instance['field_name'];
+    $data = module_invoke_all('field_ui_plus_instance_data', $instance, $fields[$name]);
     // Allow an opportunity to alter that data.
-    drupal_alter('field_ui_plus', $data);
+    drupal_alter('field_ui_plus_instance_data', $data);
 
     // Replace the label markup in its cell with the themed data.
     $form['fields'][$field_name]['label']['#markup'] = theme(
@@ -62,12 +63,28 @@ function theme_field_ui_plus_instance_data($variables) {
 /**
  * Implements hook_field_ui_plus().
  */
-function field_ui_plus_field_ui_plus_instance_data($instance) {
+function field_ui_plus_field_ui_plus_instance_data($instance, $field) {
   $data = array();
 
-  $widget_type = isset($instance['widget']['type']) ? $instance['widget']['type'] : NULL;
-
   // Is this field instance required?
+  field_ui_plus_data_required($data, $instance);
+  // Number of rows for textareas.
+  field_ui_plus_data_textarea_rows($data, $instance);
+  // Node reference allowed content types
+  field_ui_plus_data_nodereference_types($data, $instance, $field);
+
+  return $data;
+}
+
+/**
+ * Add data for the required field instance property.
+ *
+ * @param array $data
+ *   The information for the field display.
+ * @param array $instance
+ *   The field instance data.
+ */
+function field_ui_plus_data_required(&$data, $instance) {
   if (!empty($instance['required'])) {
     $data['required'] = array(
       '#type' => 'html_tag',
@@ -79,8 +96,19 @@ function field_ui_plus_field_ui_plus_instance_data($instance) {
       '#weight' => 0,
     );
   }
+}
 
-  // Number of rows for textareas.
+/**
+ * Add data for this field instance related to the allowed node types in a
+ * node reference field.
+ *
+ * @param array $data
+ *   The information for the field display.
+ * @param array $instance
+ *   The field instance data.
+ */
+function field_ui_plus_data_textarea_rows(&$data, $instance) {
+  $widget_type = isset($instance['widget']['type']) ? $instance['widget']['type'] : NULL;
   if (in_array($widget_type, array('text_textarea', 'text_textarea_with_summary'))) {
     $data['textarea_rows'] = array(
       '#type' => 'html_tag',
@@ -94,27 +122,37 @@ function field_ui_plus_field_ui_plus_instance_data($instance) {
       '#weight' => 10,
     );
   }
+}
 
-  // Node reference allowed content types
-  if (module_exists('node_reference')) {
-    if(
-      isset($instance['display']['default']['type'])
-      && $instance['display']['default']['type'] == 'node_reference_default'
-    ) {
-      $data['referenced_types'] = array(
-        '#type' => 'html_tag',
-        '#tag' => 'div',
-        '#value' => t('Referenced Types: @types', array(
-          '@types' => implode(", ", array_filter($field['settings']['referenceable_types']))
-        )),
-        '#attributes' => array(
-          'class' => array('field-ui-plus-data-referenced-types'),
-        ),
-        '#weight' => 20,
-      );
-    }
+/**
+ * Add data for the textarea rows property from this field instance.
+ *
+ * @param array $data
+ *   The information for the field display.
+ * @param array $instance
+ *   The field instance data.
+ */
+function field_ui_plus_data_nodereference_types(&$data, $instance, $field) {
+  if (!module_exists('node_reference')) {
+    return;
   }
 
-  return $data;
+  if(
+    isset($instance['display']['default']['type'])
+    && $instance['display']['default']['type'] == 'node_reference_default'
+  ) {
+    $data['referenced_types'] = array(
+      '#type' => 'html_tag',
+      '#tag' => 'div',
+      '#value' => t('Referenced Types: @types', array(
+        // Note the use of array_filter() - some of these values can be empty.
+        '@types' => implode(", ", array_filter($field['settings']['referenceable_types']))
+      )),
+      '#attributes' => array(
+        'class' => array('field-ui-plus-data-referenced-types'),
+      ),
+      '#weight' => 20,
+    );
+  }
 }
 
