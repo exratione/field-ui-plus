@@ -27,7 +27,7 @@ table.field-ui-overview span.tabledrag-changed {
   position: absolute;
   white-space: nowrap;
   /* z-index necessary to overflow the td in IE 8+ */
-  z-index: 1; 
+  z-index: 1;
 }
 
 .field-ui-plus-data > * {

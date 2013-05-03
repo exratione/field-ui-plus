@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Main module file for the Field UI Plus module.
+ */
+
+/**
  * Implements hook_form_FORM_ID_alter().
  */
 function field_ui_plus_form_field_ui_field_overview_form_alter(&$form, &$form_state) {
