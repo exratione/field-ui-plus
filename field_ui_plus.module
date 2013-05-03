@@ -75,7 +75,7 @@ function field_ui_plus_field_ui_plus_instance_data($instance, $field) {
   field_ui_plus_data_required($data, $instance);
   // Number of rows for textareas.
   field_ui_plus_data_textarea_rows($data, $instance);
-  // Node reference allowed content types
+  // Node reference field allowed content types.
   field_ui_plus_data_nodereference_types($data, $instance, $field);
 
   return $data;
@@ -104,8 +104,7 @@ function field_ui_plus_data_required(&$data, $instance) {
 }
 
 /**
- * Add data for this field instance related to the allowed node types in a
- * node reference field.
+ * Add data for the the allowed node types if a node reference field.
  *
  * @param array $data
  *   The information for the field display.
@@ -142,7 +141,7 @@ function field_ui_plus_data_nodereference_types(&$data, $instance, $field) {
     return;
   }
 
-  if(
+  if (
     isset($instance['display']['default']['type'])
     && $instance['display']['default']['type'] == 'node_reference_default'
   ) {
