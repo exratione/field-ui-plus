@@ -150,7 +150,7 @@ function field_ui_plus_data_nodereference_types(&$data, $instance, $field) {
       '#tag' => 'div',
       '#value' => t('Referenced Types: @types', array(
         // Note the use of array_filter() - some of these values can be empty.
-        '@types' => implode(", ", array_filter($field['settings']['referenceable_types']))
+        '@types' => implode(", ", array_filter($field['settings']['referenceable_types'])),
       )),
       '#attributes' => array(
         'class' => array('field-ui-plus-data-referenced-types'),
@@ -159,4 +159,3 @@ function field_ui_plus_data_nodereference_types(&$data, $instance, $field) {
     );
   }
 }
-
