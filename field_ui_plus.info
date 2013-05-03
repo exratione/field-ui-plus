@@ -1,5 +1,5 @@
 name = Field UI Plus
-description = Adds summary information display for field configuration.
+description = Displays field configuration information in the summary view.
 package = Administration
 
 dependencies[] = field_ui
